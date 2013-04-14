@@ -34,5 +34,10 @@ Just view it in your browser.
 Notes
 ------
 
+Warning::
+
+    Creating the treemap for repositories might take a long time, especially if they are large.
+    One work around is to create a treemap of a subdirectory within your repository.
+
 Git Treemap depends on InfoVis JavaScript Toolkit & GitPython.
 Thanks to the authors for these great tools.
