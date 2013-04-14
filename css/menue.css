@@ -1,0 +1,136 @@
+/*http://www.texaswebdevelopers.com/blog/template_permalink.asp?id=129*/
+a, a:hover, a:active, a:focus {
+ outline:0;
+ direction:ltr;
+}
+ 
+.wrapper {
+ position:relative; height:25px;
+}
+ 
+.mainmenu {
+ background:#dedede;
+ position:absolute;
+ z-index:100;
+ font-family:Verdana, Geneva, sans-serif;
+ font-weight:normal;
+ font-size:90%;
+ line-height:25px;
+ left:0%;	
+ height:32px;
+ width:120px;
+}
+
+ul.menu {
+ padding:0;
+ margin:0;
+ list-style:none;
+ width:120px;
+ overflow:hidden;
+ float:left;
+ margin-right:1px;
+}
+
+ul.menu a {
+ text-decoration:none;
+ color:#000;
+ padding-left:5px;
+}
+ 
+ul.menu li.list {
+float:left;
+width:250px;
+margin:-32767px -125px 0px 0px;
+}
+
+ul.menu li.list a.category {
+position:relative;
+z-index:50;
+display:block;
+float:left;
+width:120px;
+height:32px;
+background:transparent;
+margin-top:32767px;
+}
+
+ul.menu li.list a.category:hover,
+ul.menu li.list a.category:focus,
+ul.menu li.list a.category:active {
+background:#444444;
+ margin-right:1px;
+ background-image:url(images/tophover1.png);
+ background-repeat:no-repeat;
+ background-position:left top;
+}
+
+ul.submenu {
+ background:#dedede;
+ float:left;
+ padding:25px 0px 0px 0px;
+ margin:0;
+ list-style:none;
+ background-image:url(images/tophover1.png);
+ background-repeat:no-repeat;
+ background-position:left top;
+ margin:-25px 0px 0px 0px;
+}
+ 
+ul.submenu li a {
+float:left;
+width:120px;
+height:32px;
+clear:left;
+}
+
+ul.submenu li a.endlist {
+ background:url(images/bottom1.png);
+}
+ 
+ul.submenu li a.endlist:hover,
+ul.submenu li a.endlist:focus,
+ul.submenu li a.endlist:active {
+background:url(images/bottomhover1.png);
+}
+
+ul.submenu a:hover,
+ul.submenu a:focus,
+ul.submenu a:active {
+width:120px;
+margin-right:1px;
+}
+
+a.git_view {
+
+ height:32px;
+ background-repeat:no-repeat;
+ background-image:url(../img/git_button.png);
+ background-position:bottom;
+}
+a.files_view {
+ height:32px;
+ background-repeat:no-repeat;
+ background-image:url(../img/files_button.png);
+ background-position:bottom;
+}
+a.author_view {
+ height:32px;
+ background-repeat:no-repeat;
+ background-image:url(../img/author_button.png);
+ background-position:bottom;
+}
+
+
+a.git_view:hover{
+ background-color:#ff0000
+ height:32px;
+ background-image:url(../img/git_button_light.png);
+}
+a.files_view:hover{
+ height:32px;
+ background-image:url(../img/files_button_light.png);
+}
+a.author_view:hover{
+ height:32px;
+ background-image:url(../img/author_button_light.png);
+}
