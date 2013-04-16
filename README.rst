@@ -34,10 +34,9 @@ Just view it in your browser.
 Notes
 ------
 
-Warning::
-
-    Creating the treemap for repositories might take a long time, especially if they are large.
-    One work around is to create a treemap of a subdirectory within your repository.
+Warning: Creating the treemap for repositories might take a long time, especially if they are large.
+One work around is to create a treemap of a subdirectory within your repository. 
+You can also simply delete directories in the repository you do not want to be displayed.
 
 Git Treemap depends on InfoVis JavaScript Toolkit & GitPython.
 Thanks to the authors for these great tools.
