@@ -358,17 +358,17 @@ class GitFileByAuthor(GitFile):
             cnt_commits -= 1
             child = {}
             child["children"] = []
-            area = commit.stats.total["lines"]
+            changed_lines = self.get_changed_lines(author)
             child["data"] = {"$color": get_commit_color_by_time(self._repo.head.commit.committed_date-commit.committed_date ), 
-                             "$area": area, 
-                             "changed lines:": commit.stats.total["lines"], 
+                             "$area": changed_lines, 
+                             "changed lines:": changed_lines, 
                              "date": time.ctime(commit.committed_date),
                              "hash": commit.hexsha,
                              "message": commit.message,
                              "isPackage": False}
             child["id"] = commit.hexsha+self.get_path()
             child["name"] = "commit"
-            total_size_of_commits += commit.stats.total["lines"]
+            total_size_of_commits += changed_lines
             children.append(child)
         ret = {}
         ret["children"] = children
