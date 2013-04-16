@@ -211,7 +211,7 @@ class GitFile(MyFile):
         ret = 0
         cnt_commits = self.get_max_commits()
         for commit in self.__get_last_commits():
-            if cnt_commits == 0 or (time.time()-commit.committed_date)/60.0/60 > 21*24:
+            if cnt_commits == 0 or (self._repo.head.commit.committed_date-commit.committed_date)/60.0/60 > 28*24:
                 break
             cnt_commits -= 1
             ret += self._get_changed_lines_of_commit(commit.hexsha)
@@ -332,7 +332,7 @@ class GitFileByAuthor(GitFile):
         ret = 0
         cnt_commits = self.get_max_commits()
         for commit in self.__get_last_commits(author):
-            if cnt_commits == 0 or (time.time()-commit.committed_date)/60.0/60 > 21*24:
+            if cnt_commits == 0 or (self._repo.head.commit.committed_date-commit.committed_date)/60.0/60 > 28*24:
                 break
             cnt_commits -= 1
             ret += self._get_changed_lines_of_commit(commit.hexsha)
