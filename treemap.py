@@ -103,7 +103,7 @@ class MyFolder(object):
         for item in self.__items.values():
             children.append( item.get_dict_repr() )
         ret["children"] = children
-        ret["id"] = self.get_name()
+        ret["id"] = self.get_path()
         ret["name"] = self.get_name()
         ret["data"] = {"$area":self.get_size(), "isPackage": True}
         return ret
@@ -148,7 +148,7 @@ class MyFile(object):
         children = []
         ret["children"] = []
         ret["data"] = {"$color": get_color_by_filesize(self.get_size()), "$area": self.get_size(), "lines":self.cnt_lines(), "isPackage": False}
-        ret["id"] = self.get_name()
+        ret["id"] = self.get_path()
         ret["name"] = self.get_name()
         return ret
 
@@ -192,7 +192,7 @@ class GitFolder(MyFolder):
                 continue
             children.append( item.get_dict_repr() )
         ret["children"] = children
-        ret["id"] = self.get_name()
+        ret["id"] = self.get_path()
         ret["name"] = self.get_name()
         area = self.get_changed_lines()
         ret["data"] = {"$area":area, "$color": get_package_color_by_time(self.get_recent_commit_date()), "isPackage": True}
@@ -255,13 +255,13 @@ class GitFile(MyFile):
                              "hash": commit.hexsha,
                              "message": commit.message,
                              "isPackage": False}
-            child["id"] = commit.hexsha+self.get_name()
+            child["id"] = commit.hexsha+self.get_path()
             child["name"] = "commit"
             total_size_of_commits += changed_lines
             children.append(child)
         ret = {}
         ret["children"] = children
-        ret["id"] = self.get_name()
+        ret["id"] = self.get_path()
         ret["name"] = self.get_name()
         ret["data"] = {"$area":total_size_of_commits, "isPackage": False}
         return ret
@@ -291,7 +291,7 @@ class GitFolderByAuthor(GitFolder):
                         continue
                     children.append( item.get_dict_repr(author) )
                 repr["children"] = children
-                repr["id"] = self.get_name()
+                repr["id"] = self.get_path()
                 repr["name"] = self.get_name()
                 area = self.get_changed_lines(author)
                 repr["data"] = {"$area":area, "$color": get_package_color_by_time(self.get_recent_commit_date()), "isPackage": True}
@@ -305,7 +305,7 @@ class GitFolderByAuthor(GitFolder):
                     continue
                 children.append( item.get_dict_repr(author) )
             ret["children"] = children
-            ret["id"] = self.get_name()
+            ret["id"] = self.get_path()
             ret["name"] = self.get_name()
             area = self.get_changed_lines(author)
             ret["data"] = {"$area":area, "$color": get_package_color_by_time(self.get_recent_commit_date()), "isPackage": True}
@@ -366,13 +366,13 @@ class GitFileByAuthor(GitFile):
                              "hash": commit.hexsha,
                              "message": commit.message,
                              "isPackage": False}
-            child["id"] = commit.hexsha+self.get_name()
+            child["id"] = commit.hexsha+self.get_path()
             child["name"] = "commit"
             total_size_of_commits += commit.stats.total["lines"]
             children.append(child)
         ret = {}
         ret["children"] = children
-        ret["id"] = self.get_name()
+        ret["id"] = self.get_path()
         ret["name"] = self.get_name()
         ret["data"] = {"$area":total_size_of_commits, "isPackage": False}
         return ret
