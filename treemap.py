@@ -267,12 +267,19 @@ class GitFile(MyFile):
         return ret
         
     def __get_last_commits(self):
-        ret = []
-        g=git.Git(rootdir)
-        hashes = g.log('--pretty=%H','--follow','--',self.get_path()).split('\n') 
-        if hashes[0] != '':
-            ret = [self._repo.rev_parse(hash) for hash in hashes]
-        return ret
+        try:
+			self.cached_last_commits
+			#print "get2:"+self.get_name()
+			return self.cached_last_commits
+        except AttributeError:
+            ret = []
+            g=git.Git(rootdir)
+            hashes = g.log('-n'+str(self.get_max_commits()), '--pretty=%H','--follow','--',self.get_path()).split('\n') 
+            if hashes[0] != '':
+                ret = [self._repo.rev_parse(hash) for hash in hashes]
+            self.cached_last_commits = ret
+            #print "put2:"+self.get_name()
+            return ret
     
 class GitFolderByAuthor(GitFolder):
     def __init__(self, path):
@@ -339,12 +346,23 @@ class GitFileByAuthor(GitFile):
         return ret
         
     def __get_last_commits(self, author):
+        try:
+			self.cached_last_commits2[author]
+			#print "get:"+author+" "+self.get_name()
+			return self.cached_last_commits2[author]
+        except AttributeError:
+            self.cached_last_commits2 = {}
+        except KeyError:
+            pass
         ret = []
         g=git.Git(rootdir)
-        hashes = g.log('--pretty=%H', '--author', author.decode("utf8").encode("utf8"),'--follow','--',self.get_path()).split('\n') 
+        hashes = g.log('-n'+str(self.get_max_commits()), '--pretty=%H', '--author', author.decode("utf8").encode("utf8"),'--follow','--',self.get_path()).split('\n') 
         #print hashes
         if hashes[0] != '':
             ret = [self._repo.rev_parse(hash) for hash in hashes]
+        self.cached_last_commits2[author] = ret
+        #print "put:"+author+" "+self.get_name()
+        #print "commits:"+repr(ret)
         return ret
 
     def get_dict_repr(self, author):
