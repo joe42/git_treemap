@@ -7,7 +7,7 @@ Git Treemap visualizes your git repository as an animated treemap. There are thr
 2. Git view: Shows recent commits. Colors correspond to the relative time to the most recent commit. Tile size corresponds to the number of changed lines.
 3. Author view: Show recent commits of one particular author. Otherwise like git view.
 
-Take a short preview of an early version: http://www.youtube.com/watch?v=1vfDNVCgtLs
+Here is an example showing the git project started by Linus Torvalds: http://joe42.github.io/git_treemap/
 
 Installation 
 --------
