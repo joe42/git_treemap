@@ -13,6 +13,32 @@ import codecs
 
 rootdir = sys.argv[1]
 rootdir = os.path.abspath(rootdir)
+import git
+class MyGit(object):
+    g=git.Git(rootdir)
+    hashes = g.log('--pretty=%H').split('\n') 
+    print "log"
+    cached_commits_files = {}
+    repo=git.Repo(rootdir, odbt=git.GitCmdObjectDB)  
+    if hashes[0] != '':
+        cached_commits = [repo.rev_parse(hash) for hash in hashes]
+    print "cached commits"
+    for commit in cached_commits:
+        cached_commits_files[commit] = commit.stats.files
+    print "cached files"
+    git_dir=os.path.dirname(repo.git_dir)+"/"
+    repo_dir_len = len(git_dir)
+
+    @staticmethod
+    def get_log(path, max_commits, author=None):
+        path = path[MyGit.repo_dir_len:]
+        ret = []
+        for commit in MyGit.cached_commits:
+            if len(ret) >= max_commits:
+                break;
+            if MyGit.cached_commits_files[commit].has_key(path) and (author==None or commit.author.name.encode("utf8") == author) :
+                ret.append(commit)
+        return ret
 
 def get_color_by_filesize(size_in_bytes):
     if size_in_bytes > 20000:
@@ -273,11 +299,7 @@ class GitFile(MyFile):
 			#print "get2:"+self.get_name()
 			return self.cached_last_commits
         except AttributeError:
-            ret = []
-            g=git.Git(rootdir)
-            hashes = g.log('-n'+str(self.get_max_commits()), '--pretty=%H','--follow','--',self.get_path()).split('\n') 
-            if hashes[0] != '':
-                ret = [self._repo.rev_parse(hash) for hash in hashes]
+            ret = MyGit.get_log(self.get_path(), self.get_max_commits())            
             self.cached_last_commits = ret
             #print "put2:"+self.get_name()
             return ret
@@ -355,12 +377,7 @@ class GitFileByAuthor(GitFile):
             self.cached_last_commits2 = {}
         except KeyError:
             pass
-        ret = []
-        g=git.Git(rootdir)
-        hashes = g.log('-n'+str(self.get_max_commits()), '--pretty=%H', '--author', author.decode("utf8").encode("utf8"),'--follow','--',self.get_path()).split('\n') 
-        #print hashes
-        if hashes[0] != '':
-            ret = [self._repo.rev_parse(hash) for hash in hashes]
+        ret = MyGit.get_log(self.get_path(), self.get_max_commits(), author.decode("utf8").encode("utf8"))
         self.cached_last_commits2[author] = ret
         #print "put:"+author+" "+self.get_name()
         #print "commits:"+repr(ret)
