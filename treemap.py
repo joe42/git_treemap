@@ -17,15 +17,14 @@ import git
 class MyGit(object):
     g=git.Git(rootdir)
     hashes = g.log('--pretty=%H').split('\n') 
-    print "log"
+    print "caching commits"
     cached_commits_files = {}
     repo=git.Repo(rootdir, odbt=git.GitCmdObjectDB)  
     if hashes[0] != '':
         cached_commits = [repo.rev_parse(hash) for hash in hashes]
-    print "cached commits"
+    print "caching files"
     for commit in cached_commits:
         cached_commits_files[commit] = commit.stats.files
-    print "cached files"
     git_dir=os.path.dirname(repo.git_dir)+"/"
     repo_dir_len = len(git_dir)
 
@@ -46,7 +45,6 @@ class MyGit(object):
         ret = 0
         try:
             ret = MyGit.cached_commits_files[commit][path]["lines"]
-            print path+" - "+ str(ret)
         except KeyError:
             ret = 0
         return ret
