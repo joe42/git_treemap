@@ -408,8 +408,8 @@ class SimpleTreeMapBuilder(object):
         """Build a directory structure with MyFolder and MyFile objects."""         
         src_directory = self.create_dir(parent_dir)
         walk_dict = {parent_dir: src_directory}
-        for root, subFolders, files in os.walk(rootdir):
-            subFolders[:] = [f for f in subFolders if not (root+"/"+f).startswith(rootdir+"/.git")]
+        for root, subFolders, files in os.walk(parent_dir):
+            subFolders[:] = [f for f in subFolders if not (root+"/"+f).startswith(parent_dir+"/.git")]
             dir = walk_dict[root] 
             for file in files:
                 path = root+"/"+file
