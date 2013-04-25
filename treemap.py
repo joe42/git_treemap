@@ -39,6 +39,17 @@ class MyGit(object):
             if MyGit.cached_commits_files[commit].has_key(path) and (author==None or commit.author.name.encode("utf8") == author) :
                 ret.append(commit)
         return ret
+        
+    @staticmethod
+    def get_changed_lines(path, commit):
+        path = path[MyGit.repo_dir_len:]
+        ret = 0
+        try:
+            ret = MyGit.cached_commits_files[commit][path]["lines"]
+            print path+" - "+ str(ret)
+        except KeyError:
+            ret = 0
+        return ret
 
 def get_color_by_filesize(size_in_bytes):
     if size_in_bytes > 20000:
@@ -241,19 +252,7 @@ class GitFile(MyFile):
             if cnt_commits == 0 or (self._repo.head.commit.committed_date-commit.committed_date)/60.0/60 > 28*24:
                 break
             cnt_commits -= 1
-            ret += self._get_changed_lines_of_commit(commit.hexsha)
-        return ret
-    
-    def _get_changed_lines_of_commit(self, hash):
-        ret = 0
-        g=git.Git(rootdir)
-        log = g.log('--shortstat', '--pretty=tformat:','-1', hash,self.get_path())
-        added_lines = re.findall(' (\\d+) insertion', log) # 1 file changed, 4 insertions(+), 7 deletions(-)
-        deleted_lines = re.findall(' (\\d+) deletion', log) # 1 file changed, 4 insertions(+), 7 deletions(-)
-        if len(added_lines) > 0:
-            ret += sum(map(int, list(added_lines[0])))
-        if len(deleted_lines) > 0:
-            ret += sum(map(int, list(deleted_lines[0])))
+            ret += MyGit.get_changed_lines(self.get_path(), commit)
         return ret
     
     def get_recent_commit_date(self):
@@ -274,7 +273,7 @@ class GitFile(MyFile):
             cnt_commits -= 1
             child = {}
             child["children"] = []
-            changed_lines = self._get_changed_lines_of_commit(commit.hexsha)
+            changed_lines = MyGit.get_changed_lines(self.get_path(), commit)
             child["data"] = {"$color": get_commit_color_by_time(self._repo.head.commit.committed_date-commit.committed_date ), 
                              "$area": changed_lines, 
                              "changed lines:": changed_lines, 
@@ -365,7 +364,7 @@ class GitFileByAuthor(GitFile):
             if cnt_commits == 0 or (self._repo.head.commit.committed_date-commit.committed_date)/60.0/60 > 28*24:
                 break
             cnt_commits -= 1
-            ret += self._get_changed_lines_of_commit(commit.hexsha)
+            ret += MyGit.get_changed_lines(self.get_path(), commit)
         return ret
         
     def __get_last_commits(self, author):
