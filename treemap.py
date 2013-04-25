@@ -12,6 +12,7 @@ from string import Template
 import codecs
 
 rootdir = sys.argv[1]
+rootdir = os.path.abspath(rootdir)
 
 def get_color_by_filesize(size_in_bytes):
     if size_in_bytes > 20000:
